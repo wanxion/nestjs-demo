@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-// import { Event, EventSchema } from 'src/events/entities/event.entity';
+import { AuthMiddleware } from 'src/middleware/auth.middleware';
 import { User, UserSchema } from './entities/user.entity';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
@@ -12,13 +12,15 @@ import { UsersService } from './users.service';
         name: User.name, // 模型名称
         schema: UserSchema, // 模型编译模式
       },
-      // {
-      //   name: Event.name,
-      //   schema: EventSchema,
-      // },
     ]),
   ],
   controllers: [UsersController],
   providers: [UsersService],
 })
-export class UsersModule {}
+
+//  引入用户中间件
+export class UsersModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes('users');
+  }
+}

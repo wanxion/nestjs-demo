@@ -26,13 +26,9 @@ export class CreateUserDto {
     example: '15012341234',
   })
   @IsNumber()
-  readonly phone: number;
+  readonly mobileNumber: number;
 
   @ApiProperty({ description: '头像' })
   @IsString()
   readonly avatar: string;
-
-  @ApiProperty({ description: '团队' })
-  @IsString({ each: true })
-  readonly teams: string[];
 }
